@@ -156,15 +156,28 @@ static void applyChangesToCollectionView(UICollectionView *collectionView,
       }
     }, nil);
   } else if (changesIncludeNonUpdates) {
-    [_collectionView performBatchUpdates:^{
-      applyChangesToCollectionView(_collectionView, _attachController, _cellToItemMap, state, changes);
-      // Detach all the component layouts for items being deleted
-      [self _detachComponentLayoutForRemovedItemsAtIndexPaths:[changes removedIndexPaths]
+      NSLog(@"HERE WE ARE");
+      [_collectionView setContentOffset:_collectionView.contentOffset animated:NO];
+      CGSize beforeContentSize = _collectionView.contentSize;
+      NSLog(@"Before %f", beforeContentSize.height);
+      [CATransaction begin];
+      [CATransaction setDisableActions:YES];
+
+      [_collectionView performBatchUpdates:^{
+        applyChangesToCollectionView(_collectionView, _attachController, _cellToItemMap, state, changes);
+        // Detach all the component layouts for items being deleted
+        [self _detachComponentLayoutForRemovedItemsAtIndexPaths:[changes removedIndexPaths]
                                                       inState:previousState];
-      // Update current state
-      _currentState = state;
-    } completion:^(BOOL finished){
-      [_announcer dataSourceDidEndUpdates:self didModifyPreviousState:previousState withState:state byApplyingChanges:changes];
+        // Update current state
+        _currentState = state;
+
+    } completion:^(BOOL finished) {
+        [_announcer dataSourceDidEndUpdates:self didModifyPreviousState:previousState withState:state byApplyingChanges:changes];
+        CGSize afterContentSize = _collectionView.contentSize;
+        NSLog(@"After %f", afterContentSize.height);
+        CGPoint newOffset = CGPointMake(_collectionView.contentOffset.x + (afterContentSize.width - beforeContentSize.width), _collectionView.contentOffset.y + (afterContentSize.height - beforeContentSize.height));
+        [_collectionView setContentOffset:newOffset animated:NO];
+        [CATransaction commit];
     }];
   }
 }
