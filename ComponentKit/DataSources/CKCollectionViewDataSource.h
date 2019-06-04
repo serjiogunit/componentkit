@@ -86,4 +86,6 @@
  */
 @property (readonly, nonatomic, weak) id<CKSupplementaryViewDataSource> supplementaryViewDataSource;
 
+@property (nonatomic) BOOL saveScrollPosition;
+
 @end

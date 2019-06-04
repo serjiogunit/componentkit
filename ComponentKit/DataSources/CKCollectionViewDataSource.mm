@@ -158,10 +158,13 @@ static void applyChangesToCollectionView(UICollectionView *collectionView,
       // Update current state
       _currentState = state;
     } completion:^(BOOL finished) {
-      CGSize afterContentSize = _collectionView.contentSize;
-      NSLog(@"Scroll offset After: %f", afterContentSize.height);
-      CGPoint newOffset = CGPointMake(_collectionView.contentOffset.x + (afterContentSize.width - beforeContentSize.width), _collectionView.contentOffset.y + (afterContentSize.height - beforeContentSize.height));
-      [_collectionView setContentOffset:newOffset animated:NO];
+      if (_saveScrollPosition) {
+          CGSize afterContentSize = _collectionView.contentSize;
+          NSLog(@"Scroll offset After: %f", afterContentSize.height);
+          CGPoint newOffset = CGPointMake(_collectionView.contentOffset.x + (afterContentSize.width - beforeContentSize.width), _collectionView.contentOffset.y + (afterContentSize.height - beforeContentSize.height));
+          [_collectionView setContentOffset:newOffset animated:NO];
+          _saveScrollPosition = NO;
+      }
       [CATransaction commit];
     }];
   }
