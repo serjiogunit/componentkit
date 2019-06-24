@@ -40,4 +40,6 @@ struct CKTextComponentOptions
                               options:(const CKTextComponentOptions &)options
                                  size:(const CKComponentSize &)size;
 
+- (NSString *)linkAtPoint:(CGPoint)point;
+
 @end

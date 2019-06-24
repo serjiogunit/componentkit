@@ -115,4 +115,17 @@ static CKTextKitRenderer *rendererForAttributes(CKTextKitAttributes &attributes,
   return result;
 }
 
+- (NSString *)linkAtPoint:(CGPoint)point
+{
+    CKTextComponentView *view = self.viewContext.view; // Assumes the tap is being handled by your CKComponentController
+    CKTextKitRenderer *renderer = view.renderer;
+    CKTextKitTextCheckingResult *result = (CKTextKitTextCheckingResult *)[renderer textCheckingResultAtPoint:point];
+    if (result != nil) {
+        if (result.entityAttribute != nil) {
+            return (NSString *)result.entityAttribute;
+        }
+    }
+    return nil;
+}
+
 @end
