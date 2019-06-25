@@ -15,7 +15,7 @@
 
 #import <ComponentKit/CKComponentInternal.h>
 
-#import <ComponentKit/CKTextKitRenderer.h>
+#import "ComponentKit/CKTextKitRenderer+TextChecking.h"
 #import <ComponentKit/CKTextKitRendererCache.h>
 
 #import <ComponentKit/CKInternalHelpers.h>
